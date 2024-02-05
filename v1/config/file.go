@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/RichardKnop/machinery/v1/log"
+	"github.com/gempages/machinery/v1/log"
 	"gopkg.in/yaml.v2"
 )
 

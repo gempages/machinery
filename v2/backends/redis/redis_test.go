@@ -4,9 +4,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/RichardKnop/machinery/v2/backends/redis"
-	"github.com/RichardKnop/machinery/v2/config"
-	"github.com/RichardKnop/machinery/v2/tasks"
+	"github.com/gempages/machinery/v2/backends/redis"
+	"github.com/gempages/machinery/v2/config"
+	"github.com/gempages/machinery/v2/tasks"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -95,28 +95,28 @@ func TestGetState(t *testing.T) {
 	assert.Equal(t, "redigo: nil returned", err.Error())
 	assert.Nil(t, taskState)
 
-	//Pending State
+	// Pending State
 	backend.SetStatePending(signature)
 	taskState, err = backend.GetState(signature.UUID)
 	assert.NoError(t, err)
 	assert.Equal(t, signature.Name, taskState.TaskName)
 	createdAt := taskState.CreatedAt
 
-	//Received State
+	// Received State
 	backend.SetStateReceived(signature)
 	taskState, err = backend.GetState(signature.UUID)
 	assert.NoError(t, err)
 	assert.Equal(t, signature.Name, taskState.TaskName)
 	assert.Equal(t, createdAt, taskState.CreatedAt)
 
-	//Started State
+	// Started State
 	backend.SetStateStarted(signature)
 	taskState, err = backend.GetState(signature.UUID)
 	assert.NoError(t, err)
 	assert.Equal(t, signature.Name, taskState.TaskName)
 	assert.Equal(t, createdAt, taskState.CreatedAt)
 
-	//Success State
+	// Success State
 	taskResults := []*tasks.TaskResult{
 		{
 			Type:  "float64",

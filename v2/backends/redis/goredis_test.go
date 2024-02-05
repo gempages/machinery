@@ -1,21 +1,22 @@
 package redis_test
 
 import (
-	"github.com/RichardKnop/machinery/v2/backends/iface"
 	"os"
 	"strings"
 	"testing"
 
-	"github.com/RichardKnop/machinery/v2/backends/redis"
-	"github.com/RichardKnop/machinery/v2/config"
-	"github.com/RichardKnop/machinery/v2/tasks"
+	"github.com/gempages/machinery/v2/backends/iface"
+
+	"github.com/gempages/machinery/v2/backends/redis"
+	"github.com/gempages/machinery/v2/config"
+	"github.com/gempages/machinery/v2/tasks"
 	"github.com/stretchr/testify/assert"
 )
 
 func getRedisG() iface.Backend {
 	// host1:port1,host2:port2
 	redisURL := os.Getenv("REDIS_URL_GR")
-	//redisPassword := os.Getenv("REDIS_PASSWORD")
+	// redisPassword := os.Getenv("REDIS_PASSWORD")
 	if redisURL == "" {
 		return nil
 	}
@@ -102,28 +103,28 @@ func TestGetStateGR(t *testing.T) {
 	assert.Equal(t, "redis: nil", err.Error())
 	assert.Nil(t, taskState)
 
-	//Pending State
+	// Pending State
 	backend.SetStatePending(signature)
 	taskState, err = backend.GetState(signature.UUID)
 	assert.NoError(t, err)
 	assert.Equal(t, signature.Name, taskState.TaskName)
 	createdAt := taskState.CreatedAt
 
-	//Received State
+	// Received State
 	backend.SetStateReceived(signature)
 	taskState, err = backend.GetState(signature.UUID)
 	assert.NoError(t, err)
 	assert.Equal(t, signature.Name, taskState.TaskName)
 	assert.Equal(t, createdAt, taskState.CreatedAt)
 
-	//Started State
+	// Started State
 	backend.SetStateStarted(signature)
 	taskState, err = backend.GetState(signature.UUID)
 	assert.NoError(t, err)
 	assert.Equal(t, signature.Name, taskState.TaskName)
 	assert.Equal(t, createdAt, taskState.CreatedAt)
 
-	//Success State
+	// Success State
 	taskResults := []*tasks.TaskResult{
 		{
 			Type:  "float64",

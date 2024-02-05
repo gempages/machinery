@@ -9,15 +9,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/RichardKnop/machinery/v2/brokers/errs"
-	"github.com/RichardKnop/machinery/v2/brokers/iface"
-	"github.com/RichardKnop/machinery/v2/common"
-	"github.com/RichardKnop/machinery/v2/config"
-	"github.com/RichardKnop/machinery/v2/log"
-	"github.com/RichardKnop/machinery/v2/tasks"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sqs/sqsiface"
+	"github.com/gempages/machinery/v2/brokers/errs"
+	"github.com/gempages/machinery/v2/brokers/iface"
+	"github.com/gempages/machinery/v2/common"
+	"github.com/gempages/machinery/v2/config"
+	"github.com/gempages/machinery/v2/log"
+	"github.com/gempages/machinery/v2/tasks"
 
 	awssqs "github.com/aws/aws-sdk-go/service/sqs"
 )
@@ -61,7 +61,7 @@ func New(cnf *config.Config) iface.Broker {
 func (b *Broker) StartConsuming(consumerTag string, concurrency int, taskProcessor iface.TaskProcessor) (bool, error) {
 	b.Broker.StartConsuming(consumerTag, concurrency, taskProcessor)
 	qURL := b.getQueueURL(taskProcessor)
-	//save it so that it can be used later when attempting to delete task
+	// save it so that it can be used later when attempting to delete task
 	b.queueUrl = qURL
 
 	deliveries := make(chan *awssqs.ReceiveMessageOutput, concurrency)
@@ -91,7 +91,7 @@ func (b *Broker) StartConsuming(consumerTag string, concurrency int, taskProcess
 					deliveries <- output
 
 				} else {
-					//return back to pool right away
+					// return back to pool right away
 					pool <- struct{}{}
 					if err != nil {
 						log.ERROR.Printf("Queue consume error: %s", err)

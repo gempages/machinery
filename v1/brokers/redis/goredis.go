@@ -14,12 +14,12 @@ import (
 	"github.com/go-redsync/redsync/v4"
 	"github.com/redis/go-redis/v9"
 
-	"github.com/RichardKnop/machinery/v1/brokers/errs"
-	"github.com/RichardKnop/machinery/v1/brokers/iface"
-	"github.com/RichardKnop/machinery/v1/common"
-	"github.com/RichardKnop/machinery/v1/config"
-	"github.com/RichardKnop/machinery/v1/log"
-	"github.com/RichardKnop/machinery/v1/tasks"
+	"github.com/gempages/machinery/v1/brokers/errs"
+	"github.com/gempages/machinery/v1/brokers/iface"
+	"github.com/gempages/machinery/v1/common"
+	"github.com/gempages/machinery/v1/config"
+	"github.com/gempages/machinery/v1/log"
+	"github.com/gempages/machinery/v1/tasks"
 )
 
 // BrokerGR represents a Redis broker
@@ -121,7 +121,7 @@ func (b *BrokerGR) StartConsuming(consumerTag string, concurrency int, taskProce
 				return
 			case <-pool:
 				task, _ := b.nextTask(getQueueGR(b.GetConfig(), taskProcessor))
-				//TODO: should this error be ignored?
+				// TODO: should this error be ignored?
 				if len(task) > 0 {
 					deliveries <- task
 				}
@@ -356,15 +356,15 @@ func (b *BrokerGR) nextTask(queue string) (result []byte, err error) {
 // nextDelayedTask pops a value from the ZSET key using WATCH/MULTI/EXEC commands.
 func (b *BrokerGR) nextDelayedTask(key string) (result []byte, err error) {
 
-	//pipe := b.rclient.Pipeline()
+	// pipe := b.rclient.Pipeline()
 	//
-	//defer func() {
+	// defer func() {
 	//	// Return connection to normal state on error.
 	//	// https://redis.io/commands/discard
 	//	if err != nil {
 	//		pipe.Discard()
 	//	}
-	//}()
+	// }()
 
 	var (
 		items []string

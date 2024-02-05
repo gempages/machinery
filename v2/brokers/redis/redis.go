@@ -14,12 +14,12 @@ import (
 	redsyncredis "github.com/go-redsync/redsync/v4/redis/redigo"
 	"github.com/gomodule/redigo/redis"
 
-	"github.com/RichardKnop/machinery/v2/brokers/errs"
-	"github.com/RichardKnop/machinery/v2/brokers/iface"
-	"github.com/RichardKnop/machinery/v2/common"
-	"github.com/RichardKnop/machinery/v2/config"
-	"github.com/RichardKnop/machinery/v2/log"
-	"github.com/RichardKnop/machinery/v2/tasks"
+	"github.com/gempages/machinery/v2/brokers/errs"
+	"github.com/gempages/machinery/v2/brokers/iface"
+	"github.com/gempages/machinery/v2/common"
+	"github.com/gempages/machinery/v2/config"
+	"github.com/gempages/machinery/v2/log"
+	"github.com/gempages/machinery/v2/tasks"
 )
 
 const defaultRedisDelayedTasksKey = "delayed_tasks"
@@ -120,7 +120,7 @@ func (b *Broker) StartConsuming(consumerTag string, concurrency int, taskProcess
 
 				if taskProcessor.PreConsumeHandler() {
 					task, _ := b.nextTask(getQueue(b.GetConfig(), taskProcessor))
-					//TODO: should this error be ignored?
+					// TODO: should this error be ignored?
 					if len(task) > 0 {
 						deliveries <- task
 					}
