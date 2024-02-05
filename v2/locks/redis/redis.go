@@ -6,8 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/RichardKnop/machinery/v2/config"
 	"github.com/redis/go-redis/v9"
+
+	"github.com/RichardKnop/machinery/v2/config"
 )
 
 var (
@@ -43,7 +44,11 @@ func New(cnf *config.Config, addrs []string, db, retries int) Lock {
 		ropt.MasterName = cnf.Redis.MasterName
 	}
 
-	lock.rclient = redis.NewUniversalClient(ropt)
+	if cnf.Redis != nil && cnf.Redis.ClusterEnabled {
+		lock.rclient = redis.NewClusterClient(ropt.Cluster())
+	} else {
+		lock.rclient = redis.NewUniversalClient(ropt)
+	}
 
 	return lock
 }
